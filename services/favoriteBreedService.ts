@@ -14,7 +14,8 @@ export async function getAllFavoriteBreeds(): Promise<DogBreed[]> {
         orderBy: { created_at: 'asc' },
     });
 
-    const favoriteBreedIds = new Set(favoriteBreeds.map((f:FavoriteBreed) => f.breeds_id));
+    // const favoriteBreedIds = new Set(favoriteBreeds.map((f:FavoriteBreed) => f.breeds_id));
+    const favoriteBreedIds = new Set(favoriteBreeds.map((f) => f.breeds_id));
 
     const allBreeds = await DogService.fetchAllDogBreeds();
 
