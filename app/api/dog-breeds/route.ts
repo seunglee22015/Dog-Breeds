@@ -1,27 +1,15 @@
 import { NextResponse } from "next/server";
-import * as DogBreedService from "@/services/dogBreedService";
-import { DogBreedsById } from "@/types/DogBreed";
+import * as DogBreedsService from "@/services/dogBreedService";
 
-// export async function GET(_: Request, { params }: { params: { id: string } }) {
-export async function GET(
-  _: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  // const { id } = await params;
-  const id = (await params).id;
+export async function GET() {
+    try {
+        const breeds = await DogBreedsService.fetchAllDogBreeds();
 
-  if (!id) {
-    return NextResponse.json({ message: "ID is required" }, { status: 400 });
-  }
-
-  try {
-    const breed: DogBreedsById = await DogBreedService.fetchDogBreedById(id);
-    if (!breed) {
-      return NextResponse.json({ message: "Breed not found" }, { status: 404 });
+        return NextResponse.json(breeds);
+    } catch (error) {
+        return NextResponse.json(
+            { message: "An error occurred while processing your request." },
+            { status: 500 }
+        );
     }
-    return NextResponse.json(breed);
-  } catch (err) {
-    console.error("❌ Failed to fetch dog breed by ID:", err);
-    return NextResponse.json({ message: "Server Error" }, { status: 500 });
-  }
 }
